@@ -1,5 +1,27 @@
 {% extends 'mediaportalapp/index.html' %}
 
 {% block content %}
-adfaf
+<div class="container">
+    <br>
+    <div class="row">
+        <h2>Статьи из категории : {{ category.name }}</h2>
+
+    </div>
+    <br>
+    {% for article in articles_from_category %}
+    <div class="row">
+        <div class="col-sm-4">
+            <img src="{{ article.image.url }}" class="img-thumbnail">
+        </div>
+        <div class="col-sm-8">
+            <a href="{% url 'article_detail_mediaportalapp' slug=article.slug category=category.slug%}"><h3 class="text-center">{{ article.title }}</h3></a>
+            <p>
+                {{ article.content |truncatewords:25 }}
+            </p>
+        </div>
+        <hr>
+    </div>
+    <hr>
+    {% endfor %}
+</div>
 {% endblock %}

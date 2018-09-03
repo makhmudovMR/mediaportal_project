@@ -35,10 +35,10 @@
                 <span class="sr-only">(current)</span>
               </a>
             </li>
-            <li class="nav-item">
-            	<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <li class="nav-item dropdown">
+            	<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
 			    Category
-			  </button>
+			  </a>
 		  <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
 		  	
 		    {% for cat in categories %}
@@ -58,10 +58,22 @@
     <div class="container">
 
       <!-- Page Heading -->
-      <h1 class="my-4">Page Heading
-        <small>Secondary Text</small>
-      </h1>
+      <div class="row">
+        <div class="col-sm-4">
+          <span id="article_img">
 
+          </span>
+        </div>
+        <div class="col-sm-8">
+          <ul>
+          {% for article in articles %}
+            <li><a href="{% url 'article_detail_mediaportalapp' slug=article.slug category=article.category.slug %}" class="article" data-id="{{ article.id }}"><strong><small>{{ article.title }}</small></strong></a></li>
+          {% endfor%}
+          </ul>
+        </div>
+
+      </div>
+      <hr>
       <div class="row">
         <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
           <div class="card h-100">
@@ -193,7 +205,28 @@
     <!-- Bootstrap core JavaScript -->
     <script src="{% static 'jq/jquery.min.js'%}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script>
+      $(document).ready(function(){
+        $(".article").on("mouseenter", function(){
+          var article = $(this).attr('data-id')
 
+          data = {
+            article_id: article
+          }
+
+          $.ajax({
+            type: "GET",
+            url: "{% url 'show_article_image'%}",
+            data: data,
+            dataType: "json",
+            success: function(data){
+              console.log(data)
+              $("#article_img").html('<img src="http://127.0.0.1:8000' + data.article_img + '" class="img-thumbnail">')
+            }
+          })
+        })
+      })
+    </script>
   </body>
 
 </html>

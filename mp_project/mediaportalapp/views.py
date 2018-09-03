@@ -2,9 +2,11 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from django.http import JsonResponse
 from .models import Article, Category
+from .mixins import CategoryListMixin
 
-
+'''Это классы отвечающие за вывод информации на дисплей'''
 class ArticleListView(ListView):
 
 	model = Article
@@ -25,15 +27,38 @@ class CategoryListView(ListView):
 	def get_context_data(self, *args, **kwargs):
 		context = super().get_context_data(*args, **kwargs)
 		context['categories'] = self.model.objects.all()
+		context['articles'] = Article.objects.all()[:4]
 		return context
 
 
-class CategoryDetailView(DetailView):
+class CategoryDetailView(DetailView, CategoryListMixin):
 	model = Category
 	template_name = 'mediaportalapp/category_detail.html'
 
 	def get_context_data(self, *args, **kwargs):
 		context = super().get_context_data(*args, **kwargs)
-		# context['categories'] = self.models.objects.all()
-		# context['category'] = self.get_object()
+		context['category'] = self.get_object()
+		context['articles_from_category'] = self.get_object().article_set.all()
 		return context
+
+
+class ArticleDetailView(DetailView, CategoryListMixin):
+	model = Article
+	template_name = 'mediaportalapp/article_detail.html'
+
+	def get_context_data(self, *args, **kwargs):
+		context = super().get_context_data(*args, **kwargs)
+		context['article'] = self.get_object()
+		return context
+
+
+
+''' functions '''
+
+def dynamic_article_image(request):
+	article_id = request.GET.get('article_id')
+	article = Article.objects.get(id=article_id)
+	data = {
+		'article_img': article.image.url
+	}
+	return JsonResponse(data)

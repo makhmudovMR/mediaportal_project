@@ -11,6 +11,7 @@ class Category(models.Model):
 	name = models.CharField(max_length=100)
 	slug = models.SlugField()
 
+	# получаем ссылку на категории
 	def get_absolute_url(self):
 		return reverse('category_detail_mediaportalapp', kwargs={'slug': self.slug})
 
@@ -30,6 +31,9 @@ class Article(models.Model):
 	dislake = models.PositiveIntegerField(default=0)
 
 	objects = models.Manager()
+
+	def get_absolute_url(self):
+		return reverse('article_detail_mediaportalapp', kwargs={'slug': self.slug})
 
 	def __str__(self):
 		return str(self.title)
