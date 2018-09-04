@@ -36,7 +36,7 @@
         </div>
         <br>
     </div>
-    
+
     
 {% block jquery %}
 <script src="{% static 'jq/jquery.min.js'%}"></script>
@@ -83,6 +83,7 @@
                 success: function(data){
                     $.each(data, function(field){
                         $('.field_new_comment').prepend(' ' + data[field]['author']+' '+ data[field]['comment'] +' '+ data[field]['timestamp'])
+                        $('#id_coment').val('')
                     })
                 }
             })
