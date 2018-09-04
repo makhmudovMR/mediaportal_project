@@ -1,5 +1,94 @@
 {% extends 'mediaportalapp/index.html'%}
-
+{% load static %}
+{% load crispy_forms_tags %}
 {% block content %}
-hello world
-{% endblock %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h2>{{ article.title }}</h2>
+                <div><img src="{{ article.image.url }}" style="width:40%"></div>
+                {{ article.content }}
+                <small>Категория: {{ article.category.name }}</small>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-12 field_new_comment">
+                
+            </div>
+            <div class="col-12">
+                <h4>Комментарии:</h4>
+                <br>
+                {% for com in article_comments %}
+                    <p>{{ com.author.username }}:{{ com.comment }} <small><i>{{ com.timestamp|date:"Y-m-d" }}</i></small></p>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <form action="" method="POST">
+                    <input type="hidden" id="article_id" name="article_id" data-id="{{ article.id }}" value="{{ article.id }}">
+                    {% csrf_token %}
+                    {{ comment_form|crispy }}
+                    <input type="submit" value="Добавить комментарий" class="btn btn-primary" id='add_comment'>
+                </form>
+            </div>
+        </div>
+        <br>
+    </div>
+    
+    
+{% block jquery %}
+<script src="{% static 'jq/jquery.min.js'%}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+<script>
+    $(document).ready(function(){
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        var csrftoken = getCookie('csrftoken');
+
+
+
+        $('#add_comment').on('click', function(e){
+
+            e.preventDefault()
+            var article_id = $("#article_id").attr('data-id')
+            var comment = $("#id_comment").val()
+
+            data = {
+                article_id: article_id,
+                comment: comment,
+                csrfmiddlewaretoken: csrftoken,
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'add_comment' %}",
+                dataType: "json",
+                data: data,
+                success: function(data){
+                    $.each(data, function(field){
+                        $('.field_new_comment').prepend(' ' + data[field]['author']+' '+ data[field]['comment'] +' '+ data[field]['timestamp'])
+                    })
+                }
+            })
+        })
+    })
+</script>
+{% endblock jquery %}
+
+{% endblock content %}

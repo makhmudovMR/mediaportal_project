@@ -1,10 +1,12 @@
 from django.db import models
 from django.urls import reverse
-
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.conf import settings
 
 def generate_filename(instance, filename):
 	filename = instance.slug + '.jpg'
-	return f'{instance}/{filename}'
+	return u'{0}/{1}'.format(instance, filename)
 
 
 class Category(models.Model):
@@ -29,6 +31,7 @@ class Article(models.Model):
 	content = models.TextField()
 	likes = models.PositiveIntegerField(default=0)
 	dislake = models.PositiveIntegerField(default=0)
+	comments = GenericRelation('comments')
 
 	objects = models.Manager()
 
@@ -39,8 +42,15 @@ class Article(models.Model):
 		return str(self.title)
 
 
-'''class MyArticles(Article):
 
-	class Meta:
-		proxy = True'''
+class Comments(models.Model):
+
+	author = models.ForeignKey(settings.AUTH_USER_MODEL)
+	comment = models.TextField()
+	timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
+
+
+	content_type = models.ForeignKey(ContentType)
+	object_id = models.PositiveIntegerField()
+	content_object = GenericForeignKey()
 
