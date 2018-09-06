@@ -12,6 +12,20 @@
             </div>
 
         </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="col-sm-6">
+                    <a href="#" id="like" style="color:green">Like</a>
+                    <span id='span_like'>{{ article.likes }}</span>
+                </div>
+                <div class="col-sm-6">
+                    <a href="#" id="dislike" style="color:red">Dislike</a>
+                    <span id='span_dislike'>{{ article.dislikes }}</span>
+                </div>
+            </div>
+        </div>
+        <hr>
         <div class="row">
             <div class="col-12 field_new_comment">
                 
@@ -21,6 +35,7 @@
                 <br>
                 {% for com in article_comments %}
                     <p>{{ com.author.username }}:{{ com.comment }} <small><i>{{ com.timestamp|date:"Y-m-d" }}</i></small></p>
+                    <hr>
                 {% endfor %}
             </div>
         </div>
@@ -30,17 +45,87 @@
                     <input type="hidden" id="article_id" name="article_id" data-id="{{ article.id }}" value="{{ article.id }}">
                     {% csrf_token %}
                     {{ comment_form|crispy }}
-                    <input type="submit" value="Добавить комментарий" class="btn btn-primary" id='add_comment'>
+                    <input type="submit" value="Добавить комментарий" class="btn btn-primary" id='add_comment'  data-toggle="modal" data-target="#exampleModal">
                 </form>
             </div>
         </div>
         <br>
     </div>
 
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Оповещение</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Коментарий успешно добавлен
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
     
 {% block jquery %}
 <script src="{% static 'jq/jquery.min.js'%}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script>
+    $(document).ready(function(){
+        $("#like").on("click", function(e){
+            // предотрвращение клика
+            e.preventDefault()
+            var like="like"
+            var article_id = $("#article_id").attr('data-id')
+            data = {
+                article_id: article_id,
+                like:like
+            }
+            $.ajax({
+                type:"GET",
+                url: "{% url 'user_reaction' %}",
+                dataType: "json",
+                data:data,
+                success: function(data){
+                    console.log(data)
+                    $("#span_like").html(data['likes'])
+                    $("#span_dislike").html(data['dislikes'])
+                }
+            })
+        })
+    })
+
+    $(document).ready(function(){
+        $("#dislike").on("click", function(e){
+            // предотрвращение клика
+            e.preventDefault()
+            var dislike="dislike"
+            var article_id = $("#article_id").attr('data-id')
+            data = {
+                article_id: article_id,
+                dislike:dislike
+            }
+
+            $.ajax({
+                type:"GET",
+                url:"{% url 'user_reaction' %}",
+                dataType: "json",
+                data:data,
+                success: function(data){
+                    console.log(data)
+                    $("#span_like").html(data['likes'])
+                    $("#span_dislike").html(data['dislikes'])
+                }
+            })
+
+        })
+    })
+</script>
 
 <script>
     $(document).ready(function(){
@@ -60,7 +145,6 @@
             return cookieValue;
         }
         var csrftoken = getCookie('csrftoken');
-
 
 
         $('#add_comment').on('click', function(e){

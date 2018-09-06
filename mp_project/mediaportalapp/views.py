@@ -5,7 +5,7 @@ from django.views.generic.detail import DetailView
 from django.http import JsonResponse
 from django.views import View
 from .models import Article, Category
-from .mixins import CategoryListMixin
+from .mixins import CategoryAndArticlesListMixin
 from .forms import CommentForm
 
 '''Это классы отвечающие за вывод информации на дисплей'''
@@ -21,7 +21,7 @@ class ArticleListView(ListView):
 
 
 
-class CategoryListView(ListView):
+class CategoryListView(ListView, CategoryAndArticlesListMixin):
 
 	model = Category
 	template_name = 'mediaportalapp/index.html'
@@ -33,7 +33,7 @@ class CategoryListView(ListView):
 		return context
 
 
-class CategoryDetailView(DetailView, CategoryListMixin):
+class CategoryDetailView(DetailView, CategoryAndArticlesListMixin):
 	model = Category
 	template_name = 'mediaportalapp/category_detail.html'
 
@@ -44,7 +44,7 @@ class CategoryDetailView(DetailView, CategoryListMixin):
 		return context
 
 
-class ArticleDetailView(DetailView, CategoryListMixin):
+class ArticleDetailView(DetailView, CategoryAndArticlesListMixin):
 	model = Article
 	template_name = 'mediaportalapp/article_detail.html'
 
@@ -81,4 +81,43 @@ class CreateCommentView(View):
 			"timestamp": new_comment.timestamp.strftime('%Y-%m-%d')
 		}]
 		return JsonResponse(comment, safe=False)
+
+
+class DisplayArticleByCategoryView(View):
+
+	template_name = 'mediaportalapp/index.html'
+
+	def get(self, request, *args, **kwargs):
+		category_slug = request.GET.get('category_slug')
+		articles = list(Article.objects.filter(category=Category.objects.get(slug=category_slug)).values('title', 'image', 'slug'))
+		data = {
+			"articles": articles
+		}
+		return JsonResponse(data)
+
+
+class UserReactionView(View):
+
+	template_name = 'article_detail.html'
+
+	def get(self, request, *args, **kwargs):
+		article_id = self.request.GET.get('article_id')
+		print(article_id)
+		article = Article.objects.get(id=article_id)
+		likes = self.request.GET.get('like')
+		dislikes = self.request.GET.get('dislike')
+		if likes and (request.user not in article.user_reaction.all()):
+			article.likes += 1
+			article.user_reaction.add(request.user)
+			article.save()
+		if dislikes and (request.user not in article.user_reaction.all()):
+			article.dislikes += 1
+			article.user_reaction.add(request.user)
+			article.save()
+		data = {
+			'likes': article.likes,
+			'dislikes': article.dislikes
+		}
+		return JsonResponse(data)
+
 

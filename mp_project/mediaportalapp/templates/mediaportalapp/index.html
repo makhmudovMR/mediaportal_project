@@ -57,11 +57,9 @@
     <!-- Page Content -->
     <div class="container">
 
-      <!-- Page Heading -->
       <div class="row">
         <div class="col-sm-4">
           <span id="article_img">
-
           </span>
         </div>
         <div class="col-sm-8">
@@ -71,126 +69,37 @@
           {% endfor%}
           </ul>
         </div>
-
       </div>
       <hr>
-      <div class="row">
-        <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
-          <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
-            <div class="card-body">
-              <h4 class="card-title">
-                <a href="#">Project One</a>
-              </h4>
-              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur eum quasi sapiente nesciunt? Voluptatibus sit, repellat sequi itaque deserunt, dolores in, nesciunt, illum tempora ex quae? Nihil, dolorem!</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
-          <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
-            <div class="card-body">
-              <h4 class="card-title">
-                <a href="#">Project Two</a>
-              </h4>
-              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
-          <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
-            <div class="card-body">
-              <h4 class="card-title">
-                <a href="#">Project Three</a>
-              </h4>
-              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos quisquam, error quod sed cumque, odio distinctio velit nostrum temporibus necessitatibus et facere atque iure perspiciatis mollitia recusandae vero vel quam!</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
-          <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
-            <div class="card-body">
-              <h4 class="card-title">
-                <a href="#">Project Four</a>
-              </h4>
-              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
-          <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
-            <div class="card-body">
-              <h4 class="card-title">
-                <a href="#">Project Five</a>
-              </h4>
-              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
-          <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
-            <div class="card-body">
-              <h4 class="card-title">
-                <a href="#">Project Six</a>
-              </h4>
-              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque earum nostrum suscipit ducimus nihil provident, perferendis rem illo, voluptate atque, sit eius in voluptates, nemo repellat fugiat excepturi! Nemo, esse.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
-          <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
-            <div class="card-body">
-              <h4 class="card-title">
-                <a href="#">Project Seven</a>
-              </h4>
-              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
-          <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
-            <div class="card-body">
-              <h4 class="card-title">
-                <a href="#">Project Eight</a>
-              </h4>
-              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius adipisci dicta dignissimos neque animi ea, veritatis, provident hic consequatur ut esse! Commodi ea consequatur accusantium, beatae qui deserunt tenetur ipsa.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- /.row -->
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        {% for category in categories%}
+          {% if forloop.firts %}
+            <li class="nav-item">
+              <a class="nav-link active category" id="home-tab" data-toggle="tab" data-slug="{{ category.slug }}" href="#{{category.slug}}" role="tab" aria-controls="home" aria-selected="true">{{ category.name }}</a>
+            </li>
+          {% else %}
 
-      <!-- Pagination -->
-      <ul class="pagination justify-content-center">
-        <li class="page-item">
-          <a class="page-link" href="#" aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
-            <span class="sr-only">Previous</span>
-          </a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" href="#">1</a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" href="#">2</a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" href="#">3</a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" href="#" aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-            <span class="sr-only">Next</span>
-          </a>
-        </li>
+          {% endif%}
+          <li class="nav-item">
+            <a class="nav-link category" id="{{ category.slug }}-tab" data-toggle="tab"  data-slug="{{ category.slug }}" href="#{{ category.slug}}" role="tab" aria-controls="profile" aria-selected="false">{{ category.name }}</a>
+          </li>
+        {% endfor %}
       </ul>
-
+      <div class="tab-content show_aritlces_by_categories" id="myTabContent" style="border:1px solid #ccc">
+        {% for article in tabs_articles %}
+          {% if article.category.slug == 'sport'%}
+            <div class="col-sm-12">
+              <div>
+                {{ article.title}}
+              </div>
+              <div>
+                <img src="http://127.0.0.1:8000/media/{{ article.image }}" style="width:15%">
+              </div>
+              <div><a href="articles/{{ article.category.slug }}/{{article.slug}}">{{article.title}}</a></div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
     </div>
     <!-- /.container -->
     {% endblock %}
@@ -224,6 +133,31 @@
             success: function(data){
               console.log(data)
               $("#article_img").html('<img src="http://127.0.0.1:8000' + data.article_img + '" class="img-thumbnail">')
+            }
+          })
+        })
+      })
+    </script>
+    <script>
+      $(document).ready(function(){
+        $(".category").on('click', function(){
+          var category_slug = $(this).attr("data-slug")
+          data = {
+            category_slug: category_slug
+          }
+          $('.show_aritlces_by_categories').html('')
+          $.ajax({
+            type: "GET",
+            url: "{% url 'index_articles_mediaportalapp' %}",
+            dataType:"json",
+            data:data,
+            success: function(data){
+              console.log(data)
+              $.each(data, function(field){
+                for(i=0; i<=field.length; i++){
+                  $('.show_aritlces_by_categories').append('<div class="col-sm-12 articles_content"><div>'+data[field][i]['title']+'</div><div><img src="http://127.0.0.1:8000/media/'+data[field][i]['image']+'" style="width:15%"></div><div><a href="articles/'+category_slug+'/'+data[field][i]['slug']+'">'+data[field][i]['title']+'</a></div></div>')
+                }
+              })
             }
           })
         })

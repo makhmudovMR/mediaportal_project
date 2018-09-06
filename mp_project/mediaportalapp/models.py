@@ -6,7 +6,7 @@ from django.conf import settings
 
 def generate_filename(instance, filename):
 	filename = instance.slug + '.jpg'
-	return u'{0}/{1}'.format(instance, filename)
+	return u'{0}/{1}'.format(instance.slug, filename)
 
 
 class Category(models.Model):
@@ -16,7 +16,6 @@ class Category(models.Model):
 	# получаем ссылку на категории
 	def get_absolute_url(self):
 		return reverse('category_detail_mediaportalapp', kwargs={'slug': self.slug})
-
 
 	def __str__(self):
 		return str(self.name)
@@ -30,8 +29,9 @@ class Article(models.Model):
 	image = models.ImageField(upload_to=generate_filename)
 	content = models.TextField()
 	likes = models.PositiveIntegerField(default=0)
-	dislake = models.PositiveIntegerField(default=0)
+	dislikes = models.PositiveIntegerField(default=0)
 	comments = GenericRelation('comments')
+	user_reaction = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True)
 
 	objects = models.Manager()
 
